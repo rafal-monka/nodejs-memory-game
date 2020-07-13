@@ -45,7 +45,7 @@ app.get("/api/home", (req, res) => {
 });
 
 
-// --------------------------------temp
+// -------------------------------- temp
 app.get("/api/wssclients", (req, res) => {   
     let arr = wss.getWssClients()
     res.json({
@@ -53,7 +53,7 @@ app.get("/api/wssclients", (req, res) => {
     } )    
 })
 
-// --------------------------------temp
+// -------------------------------- temp
 app.get("/play/:gameid", (req, res) => {  
     console.log('/play/:gameid', req.params.gameid)
     Game.findOneAndUpdate({gameid: req.params.gameid}, {status: 'STARTED'}, {new: true})
@@ -61,7 +61,7 @@ app.get("/play/:gameid", (req, res) => {
             let playMemoryGame = new PlayMemoryGame(result, res)
             playMemoryGame.playGame()           
         })
-})
+}) 
 
 //Endpoints that must be called with an access token
 //@@@AUTH0
