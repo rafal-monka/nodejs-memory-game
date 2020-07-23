@@ -2,12 +2,12 @@ const utils = require('../utils')
 const constants = require('./../../config/constants');
 
 module.exports = class Computer {
-    _setSIZE = [...Array(constants.CONST_SIZE).keys()]
-    memory = [...Array(constants.CONST_SIZE)].map(e => Array(constants.CONST_SIZE).fill(null))
-    knownCards = []
-    unknownCards = []
 
     constructor(game) {
+        this._setSIZE = [...Array(constants.CONST_SIZE).keys()]
+        this.memory = [...Array(constants.CONST_SIZE)].map(e => Array(constants.CONST_SIZE).fill(null))
+        this.knownCards = []
+        this.unknownCards = []
         this.memoryGame = game    
     }
 
