@@ -15,7 +15,7 @@ const gameSchema = new mongoose.Schema({
     host: String,
     players: [player.playerSchema],
     board: [Array],
-    openCards: Array,
+    /*openCards: Array,*/
     currentStep: {
         type: Number,
         default: 0
@@ -24,14 +24,12 @@ const gameSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    waiting: {
-        type: Boolean,
-        default: false
-    },
     cardsLeft: {
         type: Number,
         default: null
     },
+    backgroundImage: Number,
+    theme: String,
     crdate: { 
         type: Date,
         default: new Date()

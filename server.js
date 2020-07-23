@@ -4,6 +4,8 @@ const cors = require('cors')
 const bodyParser = require("body-parser");
 const jwt = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
+const cookieParser = require('cookie-parser')
+const expressSession = require('express-session')
 
 const initDatabase = require('./config/database')
 const wss = require('./wss')
@@ -56,22 +58,47 @@ app.get("/api/wssclients", (req, res) => {
 // -------------------------------- temp
 app.get("/play/:gameid", (req, res) => {  
     console.log('/play/:gameid', req.params.gameid)
-    Game.findOneAndUpdate({gameid: req.params.gameid}, {status: 'STARTED'}, {new: true})
-        .then(function (result) { 
-            let playMemoryGame = new PlayMemoryGame(result, res)
-            playMemoryGame.playGame()           
-        })
+    // Game.findOneAndUpdate({gameid: req.params.gameid}, {status: 'STARTED'}, {new: true})
+    //     .then(function (result) { 
+    //         let playMemoryGame = new PlayMemoryGame(result, res)
+    //         playMemoryGame.playGame()                               
+    //     })
+    new PlayMemoryGame(req.params.gameid, res)
 }) 
+
+//###App API endpoints BEFORE JWT
+// app.use("/api", require('./app/routes/'))
+
+app.use(cookieParser(process.env.COOKIESECRET))
+app.use(expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIESECRET
+}))
 
 //Endpoints that must be called with an access token
 //@@@AUTH0
 if (true) app.use(checkJwt, (req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1];
-    auth.getUserProfile(token, (arg) => {
-        console.log(`server.getUserProfile=`+JSON.stringify(arg))
-        req.userProfile = arg
-        next()               
-    })         
+    try {
+        //throw new Error('test')
+        const token = req.headers.authorization.split(' ')[1];
+    // console.log(`app.use(checkJwt, token=`+token)
+//console.log(`app.use(checkJwt) req.session.userProfile=`+JSON.stringify(req.session.userProfile))
+        if (!req.session.userProfile) {
+            auth.getUserProfile(token, (arg) => {
+//console.log('SETTING app.use(checkJwt) req.session.userProfile')
+                req.session.userProfile = arg
+                // req.userProfile = arg
+                next()               
+            })
+        } else {
+//console.log('USING SESSION req.session.userProfile')
+            next()
+        }  
+
+    } catch(err) {
+        res.status(404).json({msg:err})
+    }       
 })
 //@@@AUTH0
 if (false) app.use((req, res, next) => {
@@ -110,7 +137,7 @@ app.use(function (err, req, res, next) {
 const port = process.env.PORT
 var server = app.listen(port, () => {
     wss.init(server)
-    console.log(`API listening on ${port}`)
+    console.log(`Node Memory Game API listening on ${port}`)
 });
 
 //init database
