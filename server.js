@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const cors = require('cors')
 const bodyParser = require("body-parser");
+const path = require('path')
 const jwt = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
 const cookieParser = require('cookie-parser')
@@ -75,6 +76,10 @@ app.use(expressSession({
     saveUninitialized: false,
     secret: process.env.COOKIESECRET
 }))
+
+//make default URL for SPA
+const buildLocation = 'public'; //include public folder with SPA app
+app.use(express.static(path.join(__dirname, buildLocation)));
 
 //Endpoints that must be called with an access token
 //@@@AUTH0
