@@ -47,6 +47,9 @@ app.get("/api/home", (req, res) => {
     res.json({ message: "Welcome to Memory Game API" });
 });
 
+app.get("/.well-known/pki-validation/56221AE0572BBB39573885EFB10287B1.txt" , (req, res) => {
+    res.send('42802478CEC865DB11418BF7251A26DAB62A8B635B87CA0BC8EBCB60323FE5B1\ncomodoca.com\n925a96af9760bd4')
+})
 
 // -------------------------------- temp
 app.get("/api/wssclients", (req, res) => {   
