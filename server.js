@@ -80,6 +80,15 @@ app.use(expressSession({
 const buildLocation = 'public'; //include public folder with SPA app
 app.use(express.static(path.join(__dirname, buildLocation)));
 
+//#https://blog.fullstacktraining.com/404-after-refreshing-the-browser-for-angular-vue-js-app/
+app.use("/*", (req, res, next) => {
+    if (!req.originalUrl.includes(buildLocation) && !req.originalUrl.includes('/api/') && !req.originalUrl.includes('/login') && !req.originalUrl.includes('/logout') ) {    
+        res.sendFile(`${__dirname}/${buildLocation}/index.html`);
+    } else {
+        next();
+    }
+});
+
 //Endpoints that must be called with an access token
 //@@@AUTH0
 if (true) app.use(checkJwt, (req, res, next) => {
