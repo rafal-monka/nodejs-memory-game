@@ -47,10 +47,6 @@ app.get("/api/home", (req, res) => {
     res.json({ message: "Welcome to Memory Game API" });
 });
 
-app.get("/.well-known/pki-validation/56221AE0572BBB39573885EFB10287B1.txt" , (req, res) => {
-    res.send('42802478CEC865DB11418BF7251A26DAB62A8B635B87CA0BC8EBCB60323FE5B1\ncomodoca.com\n925a96af9760bd4')
-})
-
 // -------------------------------- temp
 app.get("/api/wssclients", (req, res) => {   
     let arr = wss.getWssClients()
@@ -90,7 +86,7 @@ if (true) app.use(checkJwt, (req, res, next) => {
     try {
         //throw new Error('test')
         const token = req.headers.authorization.split(' ')[1];
-    // console.log(`app.use(checkJwt, token=`+token)
+    console.log('app.use(checkJwt, token='+token)
 //console.log(`app.use(checkJwt) req.session.userProfile=`+JSON.stringify(req.session.userProfile))
         if (!req.session.userProfile) {
             auth.getUserProfile(token, (arg) => {
@@ -134,7 +130,7 @@ app.get("/api/external", (req, res) => {
 //errors
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
-        res.status(401).send('JWT Unauthorized access. Invalid token...');
+        res.status(401).send('JWT Unauthorized access. Invalid token...'+err.stack);
     } else {
         res.status(404).json('ERROR! '+err.stack)
     }
