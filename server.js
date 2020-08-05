@@ -95,7 +95,7 @@ if (true) app.use(checkJwt, (req, res, next) => {
     try {
         //throw new Error('test')
         const token = req.headers.authorization.split(' ')[1];
-    console.log('app.use(checkJwt, token='+token)
+    //console.log('app.use(checkJwt, token='+token)
 //console.log(`app.use(checkJwt) req.session.userProfile=`+JSON.stringify(req.session.userProfile))
         if (!req.session.userProfile) {
             auth.getUserProfile(token, (arg) => {
